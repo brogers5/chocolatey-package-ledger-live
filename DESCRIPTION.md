@@ -1,25 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
-<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
-  <metadata>
-    <id>ledger-live</id>
-    <version>2.81.2</version>
-    <packageSourceUrl>https://github.com/brogers5/chocolatey-package-ledger-live/tree/v2.81.2</packageSourceUrl>
-    <owners>sublym0nal</owners>
-    <title>Ledger Live</title>
-    <authors>Ledger SAS</authors>
-    <projectUrl>https://www.ledger.com/ledger-live</projectUrl>
-    <iconUrl>https://cdn.jsdelivr.net/gh/brogers5/chocolatey-package-ledger-live@61ab9919bb06f59e0b03ea62e5f7695e1a3d5bbd/ledger-live.png</iconUrl>
-    <copyright>Copyright © 2024 Ledger Live Team</copyright>
-    <licenseUrl>https://shop.ledger.com/pages/ledger-live-terms-of-use</licenseUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/LedgerHQ/ledger-live/tree/%40ledgerhq/live-desktop%402.81.2</projectSourceUrl>
-    <docsUrl>https://support.ledger.com/hc/en-us/sections/4404369631249-Ledger-Live</docsUrl>
-    <!--<mailingListUrl>No mailing list/forum URL is available</mailingListUrl>-->
-    <bugTrackerUrl>https://github.com/LedgerHQ/ledger-live/issues</bugTrackerUrl>
-    <tags>ledger-live hardwarewallet cryptocurrency</tags>
-    <summary>A crypto wallet app and Web3 gateway</summary>
-    <description><![CDATA[## Ledger Live
+## Ledger Live
 
 A multi-crypto wallet app to secure thousands of coins and NFTs. [See all supported coins and tokens](https://www.ledger.com/supported-crypto-assets).
 
@@ -66,10 +45,3 @@ For future upgrade operations, consider opting into Chocolatey's `useRememberedA
 ```shell
 choco feature enable --name="'useRememberedArgumentsForUpgrades'"
 ```
-]]></description>
-    <releaseNotes>https://github.com/LedgerHQ/ledger-live/releases/tag/%40ledgerhq/live-desktop%402.81.2</releaseNotes>
-  </metadata>
-  <files>
-    <file src="tools\**" target="tools" />
-  </files>
-</package>

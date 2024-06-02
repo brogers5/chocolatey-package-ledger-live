@@ -1,0 +1,61 @@
+Import-Module au
+Import-Module PowerShellForGitHub
+
+$currentPath = (Split-Path $MyInvocation.MyCommand.Definition)
+. $currentPath\helpers.ps1
+
+$owner = 'LedgerHQ'
+$repository = 'ledger-live'
+
+function global:au_BeforeUpdate($Package) {
+    $Latest.Checksum64 = Get-RemoteChecksum -Url $Latest.Url64 -Algorithm SHA512
+
+    #Verify the integrity of the binary, following these instructions:
+    #https://www.ledger.com/ledger-live/lld-signatures
+
+    #Confirm integrity of the published checksums file
+    Update-OpenSSLPublicKey -TagName $Latest.TagName
+    Update-ChecksumFile -Version $Latest.SoftwareVersion
+    Update-SignatureFile -Version $Latest.SoftwareVersion
+    Confirm-Signature
+
+    #Confirm integrity of installer binary
+    $expectedChecksum = Get-ExpectedChecksum
+    if ($Latest.Checksum64 -ne $expectedChecksum) {
+        throw "Checksum verification failed!`n
+        Expected: $expectedChecksum
+        Actual: $($Latest.Checksum64)"
+    }
+
+    Set-DescriptionFromReadme -Package $Package -ReadmePath '.\DESCRIPTION.md'
+}
+
+function global:au_SearchReplace {
+    @{
+        'tools\chocolateyInstall.ps1'   = @{
+            '(^[$]?\s*url64bit\s*=\s*)(''.*'')'   = "`$1'$($Latest.Url64)'"
+            '(^[$]?\s*checksum64\s*=\s*)(''.*'')' = "`$1'$($Latest.Checksum64)'"
+        }
+        "$($Latest.PackageName).nuspec" = @{
+            '(<packageSourceUrl>)[^<]*(</packageSourceUrl>)' = "`$1https://github.com/brogers5/chocolatey-package-$($Latest.PackageName)/tree/v$($Latest.Version)`$2"
+            '(<projectSourceUrl>)[^<]*(</projectSourceUrl>)' = "`$1https://github.com/$owner/$repository/tree/$($Latest.TagName)`$2"
+            '(\<releaseNotes\>).*?(\</releaseNotes\>)'       = "`${1}https://github.com/$owner/$repository/releases/tag/$($Latest.TagName)`$2"
+            '(<copyright>)[^<]*(</copyright>)'               = "`$1Copyright © $(Get-Date -Format yyyy) Ledger Live Team`$2"
+        }
+    }
+}
+
+function global:au_GetLatest {
+    $releases = Get-GitHubRelease -OwnerName $owner -RepositoryName $repository
+    $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,2}\.\d' } | Select-Object -First 1
+    $latestVersion = $latestRelease.tag_name.Substring(23)
+
+    return @{
+        SoftwareVersion = $latestVersion
+        TagName         = "%40ledgerhq/live-desktop%40$latestVersion"
+        Url64           = "https://download.live.ledger.com/ledger-live-desktop-$latestVersion-win-x64.exe"
+        Version         = $latestVersion #This may change if building a package fix version
+    }
+}
+
+Update-Package -ChecksumFor None -NoReadme
