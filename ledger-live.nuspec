@@ -17,7 +17,7 @@
     <docsUrl>https://support.ledger.com/hc/en-us/sections/4404369631249-Ledger-Live</docsUrl>
     <!--<mailingListUrl>No mailing list/forum URL is available</mailingListUrl>-->
     <bugTrackerUrl>https://github.com/LedgerHQ/ledger-live/issues</bugTrackerUrl>
-    <tags>ledger-live hardwarewallet cryptocurrency</tags>
+    <tags>ledger-live ledger live nano hardware wallet cryptocurrency bip39 cross-platform 64-bit</tags>
     <summary>A crypto wallet app and Web3 gateway</summary>
     <description><![CDATA[## Ledger Live
 
