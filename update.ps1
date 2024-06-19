@@ -46,15 +46,32 @@ function global:au_SearchReplace {
 }
 
 function global:au_GetLatest {
+    $userAgent = 'Update checker of Chocolatey Community Package ''ledger-live'''
+    $canonicalUri = 'https://download.live.ledger.com/latest/win'
+    $headResponse = Invoke-WebRequest -Uri $canonicalUri -UserAgent $userAgent -Method Head -MaximumRedirection 1 -SkipHttpErrorCheck
+
+    if ($null -ne $headResponse.BaseResponse.ResponseUri) {
+        $redirectedRequestUri = $headResponse.BaseResponse.ResponseUri
+    }
+    elseif ($null -ne $headResponse.BaseResponse.RequestMessage.RequestUri) {
+        $redirectedRequestUri = $headResponse.BaseResponse.RequestMessage.RequestUri
+    }
+
+    $servedVersion = (Get-Version -Version $redirectedRequestUri).Version
+
     $releases = Get-GitHubRelease -OwnerName $owner -RepositoryName $repository
     $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,2}\.\d' } | Select-Object -First 1
-    $latestVersion = $latestRelease.tag_name.Substring(23)
+    $actualLatestVersion = [version] $latestRelease.tag_name.Substring(23)
+
+    if ($servedVersion -lt $actualLatestVersion) {
+        Write-Warning "A newer tag for Ledger Live Desktop was found (v$actualLatestVersion), but this build has not been published yet!"
+    }
 
     return @{
-        SoftwareVersion = $latestVersion
-        TagName         = "%40ledgerhq/live-desktop%40$latestVersion"
-        Url64           = "https://download.live.ledger.com/ledger-live-desktop-$latestVersion-win-x64.exe"
-        Version         = $latestVersion #This may change if building a package fix version
+        SoftwareVersion = $servedVersion
+        TagName         = "%40ledgerhq/live-desktop%40$servedVersion"
+        Url64           = "https://download.live.ledger.com/ledger-live-desktop-$servedVersion-win-x64.exe"
+        Version         = $servedVersion #This may change if building a package fix version
     }
 }
 
