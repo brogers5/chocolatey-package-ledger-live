@@ -39,7 +39,8 @@ function global:au_SearchReplace {
         "$($Latest.PackageName).nuspec" = @{
             '(<packageSourceUrl>)[^<]*(</packageSourceUrl>)' = "`$1https://github.com/brogers5/chocolatey-package-$($Latest.PackageName)/tree/v$($Latest.Version)`$2"
             '(<projectSourceUrl>)[^<]*(</projectSourceUrl>)' = "`$1https://github.com/$owner/$repository/tree/$($Latest.TagName)`$2"
-            '(\<releaseNotes\>).*?(\</releaseNotes\>)'       = "`${1}https://github.com/$owner/$repository/releases/tag/$($Latest.TagName)`$2"
+            '(\*\*Release Notes:\*\* ).*$'                   = "`$1https://github.com/$owner/$repository/blob/$($Latest.TagName)/apps/ledger-live-desktop/RELEASE_NOTES.md"
+            '(\*\*Full Changelog:\*\* ).*$'                  = "`$1https://github.com/$owner/$repository/releases/tag/$($Latest.TagName)"
             '(<copyright>)[^<]*(</copyright>)'               = "`$1Copyright © $(Get-Date -Format yyyy) Ledger Live Team`$2"
         }
     }

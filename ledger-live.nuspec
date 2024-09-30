@@ -67,7 +67,10 @@ For future upgrade operations, consider opting into Chocolatey's `useRememberedA
 choco feature enable --name="'useRememberedArgumentsForUpgrades'"
 ```
 ]]></description>
-    <releaseNotes>https://github.com/LedgerHQ/ledger-live/releases/tag/%40ledgerhq/live-desktop%402.87.0</releaseNotes>
+    <releaseNotes><![CDATA[
+**Release Notes:** https://github.com/LedgerHQ/ledger-live/blob/%40ledgerhq/live-desktop%402.87.0/apps/ledger-live-desktop/RELEASE_NOTES.md
+**Full Changelog:** https://github.com/LedgerHQ/ledger-live/releases/tag/%40ledgerhq/live-desktop%402.87.0
+]]>    </releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
