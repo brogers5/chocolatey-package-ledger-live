@@ -1,5 +1,6 @@
 Import-Module au
 Import-Module PowerShellForGitHub
+Import-Module FXPSYaml
 
 $currentPath = (Split-Path $MyInvocation.MyCommand.Definition)
 . $currentPath\helpers.ps1
@@ -8,8 +9,6 @@ $owner = 'LedgerHQ'
 $repository = 'ledger-live'
 
 function global:au_BeforeUpdate($Package) {
-    $Latest.Checksum64 = Get-RemoteChecksum -Url $Latest.Url64 -Algorithm SHA512
-
     #Verify the integrity of the binary, following these instructions:
     #https://www.ledger.com/ledger-live/lld-signatures
 
@@ -22,9 +21,9 @@ function global:au_BeforeUpdate($Package) {
     #Confirm integrity of installer binary
     $expectedChecksum = Get-ExpectedChecksum
     if ($Latest.Checksum64 -ne $expectedChecksum) {
-        throw "Checksum verification failed!`n
-        Expected: $expectedChecksum
-        Actual: $($Latest.Checksum64)"
+        throw "Published checksums are not consistent!`n
+        Checksum File: $expectedChecksum
+        Latest Version Info: $($Latest.Checksum64)"
     }
 
     Set-DescriptionFromReadme -Package $Package -ReadmePath '.\DESCRIPTION.md'
@@ -48,17 +47,17 @@ function global:au_SearchReplace {
 
 function global:au_GetLatest {
     $userAgent = 'Update checker of Chocolatey Community Package ''ledger-live'''
-    $canonicalUri = 'https://download.live.ledger.com/latest/win'
-    $headResponse = Invoke-WebRequest -Uri $canonicalUri -UserAgent $userAgent -Method Head -MaximumRedirection 1 -SkipHttpErrorCheck
+    $latestVersionInfoUri = 'https://download.live.ledger.com/latest-win.yml'
 
-    if ($null -ne $headResponse.BaseResponse.ResponseUri) {
-        $redirectedRequestUri = $headResponse.BaseResponse.ResponseUri
-    }
-    elseif ($null -ne $headResponse.BaseResponse.RequestMessage.RequestUri) {
-        $redirectedRequestUri = $headResponse.BaseResponse.RequestMessage.RequestUri
-    }
+    $tempFilePath = New-TemporaryFile
+    Invoke-WebRequest -Uri $latestVersionInfoUri -UserAgent $userAgent -Method Get -OutFile $tempFilePath
+    $latestVersionInfo = ConvertFrom-Yaml -Path $tempFilePath
+    Remove-Item $tempFilePath -Force
 
-    $servedVersion = (Get-Version -Version $redirectedRequestUri).Version
+    $servedVersion = $latestVersionInfo.version
+
+    $checksumBytes = [System.Convert]::FromBase64String($latestVersionInfo.sha512) 
+    $checksumString = ($checksumBytes | ForEach-Object ToString x2) -join ''
 
     $releases = Get-GitHubRelease -OwnerName $owner -RepositoryName $repository
     $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,2}\.\d' } | Select-Object -First 1
@@ -69,9 +68,10 @@ function global:au_GetLatest {
     }
 
     return @{
+        Checksum64      = $checksumString
         SoftwareVersion = $servedVersion
         TagName         = "%40ledgerhq/live-desktop%40$servedVersion"
-        Url64           = "https://download.live.ledger.com/ledger-live-desktop-$servedVersion-win-x64.exe"
+        Url64           = "https://download.live.ledger.com/$($latestVersionInfo.path)"
         Version         = $servedVersion #This may change if building a package fix version
     }
 }

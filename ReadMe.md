@@ -32,7 +32,7 @@ A successful build will create `ledger-live.x.y.z.nupkg`, where `x.y.z` should b
 
 ## Update
 
-This package should be automatically updated by the [Chocolatey Automatic Package Updater Module](https://github.com/majkinetor/au), with update queries implemented by the [PowerShellForGitHub PowerShell Module](https://github.com/microsoft/PowerShellForGitHub). If it is outdated by more than a few days, please [open an issue](https://github.com/brogers5/chocolatey-package-ledger-live/issues).
+This package should be automatically updated by the [Chocolatey Automatic Package Updater Module](https://github.com/majkinetor/au), with update queries implemented with the [PowerShellForGitHub](https://github.com/microsoft/PowerShellForGitHub) and [FXPSYaml](https://www.powershellgallery.com/packages/FXPSYaml) PowerShell modules. If it is outdated by more than a few days, please [open an issue](https://github.com/brogers5/chocolatey-package-ledger-live/issues).
 
 AU expects the parent directory that contains this repository to share a name with the Nuspec (`ledger-live`). Your local repository should therefore be cloned accordingly:
 
