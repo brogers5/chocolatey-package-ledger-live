@@ -63,7 +63,7 @@ function global:au_GetLatest {
     $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,2}\.\d' } | Select-Object -First 1
     $actualLatestVersion = [version] $latestRelease.tag_name.Substring(23)
 
-    if ($servedVersion -lt $actualLatestVersion) {
+    if ([version] $servedVersion -lt $actualLatestVersion) {
         Write-Warning "A newer tag for Ledger Live Desktop was found (v$actualLatestVersion), but this build has not been published yet!"
     }
 
