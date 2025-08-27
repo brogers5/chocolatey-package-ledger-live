@@ -70,7 +70,7 @@ function global:au_GetLatest {
     $checksumString = ($checksumBytes | ForEach-Object ToString x2) -join ''
 
     $releases = Get-GitHubRelease -OwnerName $owner -RepositoryName $repository
-    $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,2}\.\d' } | Select-Object -First 1
+    $latestRelease = $releases | Where-Object { $_.tag_name -match '@ledgerhq/live-desktop@\d\.(\d){1,3}\.\d' } | Select-Object -First 1
     $actualLatestVersion = [version] $latestRelease.tag_name.Substring(23)
 
     if ([version] $servedVersion -lt $actualLatestVersion) {
