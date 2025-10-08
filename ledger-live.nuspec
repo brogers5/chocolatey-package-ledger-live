@@ -14,7 +14,7 @@
     <licenseUrl>https://shop.ledger.com/pages/ledger-live-terms-of-use</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/LedgerHQ/ledger-live/tree/%40ledgerhq/live-desktop%402.130.1</projectSourceUrl>
-    <docsUrl>https://support.ledger.com/hc/en-us/sections/4404369631249-Ledger-Live</docsUrl>
+    <docsUrl>https://support.ledger.com/topic?topic=ledger-live</docsUrl>
     <mailingListUrl>https://www.reddit.com/r/ledgerwallet/</mailingListUrl>
     <bugTrackerUrl>https://github.com/LedgerHQ/ledger-live/issues</bugTrackerUrl>
     <tags>ledger-live ledger live nano hardware wallet cryptocurrency bip39 cross-platform 64-bit</tags>
