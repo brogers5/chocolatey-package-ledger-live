@@ -1,4 +1,17 @@
-﻿# <img src="https://cdn.jsdelivr.net/gh/brogers5/chocolatey-package-ledger-live@61ab9919bb06f59e0b03ea62e5f7695e1a3d5bbd/ledger-live.png" width="48" height="48"/> Chocolatey Package: [Ledger Live](https://community.chocolatey.org/packages/ledger-live)
+﻿[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+# ⛔️ DEPRECATED
+
+As of v2.132.0, Ledger SAS has rebranded Ledger Live to [Ledger Wallet](https://shop.ledger.com/pages/ledger-wallet). This Chocolatey package has therefore been deprecated to reflect its rebranding, and has been superseded by [`ledger-wallet`](https://community.chocolatey.org/packages/ledger-wallet).
+
+This repository will remain online only for archival purposes.
+
+>[!Warning]
+>I do not have redistribution rights for Ledger Live, so any legacy package versions that were not cached by the Community Repository's CDN are functionally dependent on Ledger SAS continuing to host older installers for Ledger Live on their servers. Therefore, I cannot guarantee they will continue to work indefinitely.
+
+---
+
+# Chocolatey Package: [Ledger Live](https://community.chocolatey.org/packages/ledger-live)
 
 [![Latest package version shield](https://img.shields.io/chocolatey/v/ledger-live.svg)](https://community.chocolatey.org/packages/ledger-live)
 [![Total package download count shield](https://img.shields.io/chocolatey/dt/ledger-live.svg)](https://community.chocolatey.org/packages/ledger-live)
